@@ -3,6 +3,7 @@
 import * as vscode from "vscode";
 import { buildPrompt } from "./promptBuilder";
 import { generateComment } from "./ollama";
+import { addCommentToFile, getCurrLine } from "./manageEditor";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -34,6 +35,11 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showErrorMessage("No Comment generated.");
         return;
       }
+      const fileURI = editor.document.uri;
+      const fileName = editor.document.fileName;
+      const currentLine = getCurrLine(editor);
+      addCommentToFile(fileURI, fileName, currentLine, comment);
+
       vscode.window.showInformationMessage("Generating comment...");
     }
   );
